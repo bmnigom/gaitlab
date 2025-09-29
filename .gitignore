@@ -1,0 +1,20 @@
+# File: .gitignore
+
+# Ignorar la carpeta de salida
+/output/
+
+# Ignorar la carpeta de datos (opcional, pero recomendado si los datos son grandes o privados)
+/data/
+
+# Ignorancia estándar de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Ignorancia de Jupyter Notebook
+.ipynb_checkpoints

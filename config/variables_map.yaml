@@ -1,0 +1,175 @@
+# File: variables_map.yaml
+version: 1
+
+files:
+  joint_angles:
+    pattern: "*_jointAngles.csv"
+  joint_moments:
+    pattern: "*_jointMoments.csv"
+  joint_powers:
+    pattern: "*_jointPowers.csv"
+  joint_forces:
+    pattern: "*_jointForces.csv"
+  platform_grf:
+    pattern: "*_platformGrf.csv"
+  joint_trajectories:
+    pattern: "*_Trajectories.csv"
+
+datasets:
+
+  # ----------------------------- ANGLES -----------------------------
+  angles:
+    source_file: joint_angles
+    dataframe_var: angles_df
+    time_column: "time"
+    processing_type: kinematic
+    canonical_to_headers:
+      angles.shoulder.x.left:  ["l_shoulderangles_x"]
+      angles.shoulder.x.right: ["r_shoulderangles_x"]
+      angles.shoulder.y.left:  ["l_shoulderangles_y"]
+      angles.shoulder.y.right: ["r_shoulderangles_y"]
+      angles.shoulder.z.left:  ["l_shoulderangles_z"]
+      angles.shoulder.z.right: ["r_shoulderangles_z"]
+
+      angles.elbow.x.left:  ["l_elbowangles_x"]
+      angles.elbow.x.right: ["r_elbowangles_x"]
+      angles.elbow.y.left:  ["l_elbowangles_y"]
+      angles.elbow.y.right: ["r_elbowangles_y"]
+      angles.elbow.z.left:  ["l_elbowangles_z"]
+      angles.elbow.z.right: ["r_elbowangles_z"]
+
+      angles.wrist.x.left:  ["l_wristangles_x"]
+      angles.wrist.x.right: ["r_wristangles_x"]
+      angles.wrist.y.left:  ["l_wristangles_y"]
+      angles.wrist.y.right: ["r_wristangles_y"]
+      angles.wrist.z.left:  ["l_wristangles_z"]
+      angles.wrist.z.right: ["r_wristangles_z"]
+
+      angles.pelvis.x.left:  ["l_pelvisangles_x"]
+      angles.pelvis.x.right: ["r_pelvisangles_x"]
+      angles.pelvis.y.left:  ["l_pelvisangles_y"]
+      angles.pelvis.y.right: ["r_pelvisangles_y"]
+      angles.pelvis.z.left:  ["l_pelvisangles_z"]
+      angles.pelvis.z.right: ["r_pelvisangles_z"]
+
+      angles.hip.x.left:  ["l_hipangles_x"]
+      angles.hip.x.right: ["r_hipangles_x"]
+      angles.hip.y.left:  ["l_hipangles_y"]
+      angles.hip.y.right: ["r_hipangles_y"]
+      angles.hip.z.left:  ["l_hipangles_z"]
+      angles.hip.z.right: ["r_hipangles_z"]
+
+      angles.knee.x.left:  ["l_kneeangles_x"]
+      angles.knee.x.right: ["r_kneeangles_x"]
+      angles.knee.y.left:  ["l_kneeangles_y"]
+      angles.knee.y.right: ["r_kneeangles_y"]
+      angles.knee.z.left:  ["l_kneeangles_z"]
+      angles.knee.z.right: ["r_kneeangles_z"]
+
+      angles.ankle.x.left:  ["l_ankleangles_x"]
+      angles.ankle.x.right: ["r_ankleangles_x"]
+      angles.ankle.z.left:  ["l_ankleangles_z"]
+      angles.ankle.z.right: ["r_ankleangles_z"]
+
+      angles.footprogress.z.left:  ["l_footprogressangles_z"]
+      angles.footprogress.z.right: ["r_footprogressangles_z"]
+
+  # ----------------------------- MOMENTS ----------------------------
+  moments:
+    source_file: joint_moments
+    dataframe_var: moments_df
+    time_column: "time"
+    processing_type: kinetic
+    canonical_to_headers:
+      moments.hip.x.left:   ["l_hipmoment_x"]
+      moments.hip.x.right:  ["r_hipmoment_x"]
+      moments.hip.y.left:   ["l_hipmoment_y"]
+      moments.hip.y.right:  ["r_hipmoment_y"]
+      moments.hip.z.left:   ["l_hipmoment_z"]
+      moments.hip.z.right:  ["r_hipmoment_z"]
+
+      moments.knee.x.left:  ["l_kneemoment_x"]
+      moments.knee.x.right: ["r_kneemoment_x"]
+      moments.knee.y.left:  ["l_kneemoment_y"]
+      moments.knee.y.right: ["r_kneemoment_y"]
+      moments.knee.z.left:  ["l_kneemoment_z"]
+      moments.knee.z.right: ["r_kneemoment_z"]
+
+      moments.ankle.x.left:  ["l_anklemoment_x"]
+      moments.ankle.x.right: ["r_anklemoment_x"]
+      moments.ankle.y.left:  ["l_anklemoment_y"]
+      moments.ankle.y.right: ["r_anklemoment_y"]
+      moments.ankle.z.left:  ["l_anklemoment_z"]
+      moments.ankle.z.right: ["r_anklemoment_z"]
+
+  # ----------------------------- MOMENTS ----------------------------
+  forces:
+    source_file: joint_forces
+    dataframe_var: forces_df
+    time_column: "time"
+    processing_type: kinetic
+    canonical_to_headers:
+      forces.hip.x.left:   ["l_hipforce_x"]
+      forces.hip.x.right:  ["r_hipforce_x"]
+      forces.hip.y.left:   ["l_hipforce_y"]
+      forces.hip.y.right:  ["r_hipforce_y"]
+      forces.hip.z.left:   ["l_hipforce_z"]
+      forces.hip.z.right:  ["r_hipforce_z"]
+
+      forces.knee.x.left:  ["l_kneeforce_x"]
+      forces.knee.x.right: ["r_kneeforce_x"]
+      forces.knee.y.left:  ["l_kneeforce_y"]
+      forces.knee.y.right: ["r_kneeforce_y"]
+      forces.knee.z.left:  ["l_kneeforce_z"]
+      forces.knee.z.right: ["r_kneeforce_z"]
+
+      forces.ankle.x.left:  ["l_ankleforce_x"]
+      forces.ankle.x.right: ["r_ankleforce_x"]
+      forces.ankle.y.left:  ["l_ankleforce_y"]
+      forces.ankle.y.right: ["r_ankleforce_y"]
+      forces.ankle.z.left:  ["l_ankleforce_z"]
+      forces.ankle.z.right: ["r_ankleforce_z"]
+  # ------------------------------ POWERS -----------------------------
+  powers:
+    source_file: joint_powers
+    dataframe_var: powers_df
+    time_column: "time"
+    processing_type: kinetic
+    canonical_to_headers:
+
+      powers.hip.z.left:   ["l_hippower_z"]
+      powers.hip.z.right:  ["r_hippower_z"]
+
+      powers.knee.z.left:  ["l_kneepower_z"]
+      powers.knee.z.right: ["r_kneepower_z"]
+
+      powers.ankle.z.left:  ["l_anklepower_z"]
+      powers.ankle.z.right: ["r_anklepower_z"]
+
+  # ------------------------------- GRF ------------------------------
+  platform_grf:
+    source_file: platform_grf
+    dataframe_var: platform_df
+    time_column: "time"
+    processing_type: kinetic
+    canonical_to_headers:
+      platform.grf.x.left:  ["l_normalisedgrf_x"]
+      platform.grf.x.right: ["r_normalisedgrf_x"]
+
+      platform.grf.y.left:  ["l_normalisedgrf_y"]
+      platform.grf.y.right: ["r_normalisedgrf_y"]
+
+      platform.grf.z.left:  ["l_normalisedgrf_z"]
+      platform.grf.z.right: ["r_normalisedgrf_z"]
+  # ------------------------- TRAJECTORIES ---------------------------
+  trajectories:
+    source_file: joint_trajectories
+    time_column: "time"
+    processing_type: kinematic
+    canonical_to_headers:
+      trajectories.ankle.x.left:  ["l_hee_x"]
+      trajectories.ankle.x.right: ["r_hee_x"]
+      trajectories.ankle.y.left:  ["l_hee_y"]
+      trajectories.ankle.y.right: ["r_hee_y"]
+      trajectories.ankle.z.left:  ["l_hee_z"]
+      trajectories.ankle.z.right: ["r_hee_z"]

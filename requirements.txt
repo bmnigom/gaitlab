@@ -1,0 +1,7 @@
+# File: requirements.txt
+pandas
+numpy
+pyyaml
+matplotlib
+plotly
+pyarrow

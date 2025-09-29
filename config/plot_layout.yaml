@@ -1,0 +1,99 @@
+# File: layout.yaml
+# Purpose: Declare the plotting/processing panel layout.
+version: 1
+
+units:
+  angles: "deg"
+  moments: "Nm/kg"
+  power: "W/kg"
+  forces: "N/kg"
+  platform: "BW"
+
+panels:
+  - name: Joint Rotation Angles
+    id: ANGLES_PANEL
+    grid: {rows: 7, cols: 3}
+    entries:
+      - {family: angles, part: shoulder, axis: x, lateral: true,  label: "Shoulder flex/ext"}
+      - {family: angles, part: shoulder, axis: y, lateral: true,  label: "Shoulder abd/add"}
+      - {family: angles, part: shoulder, axis: z, lateral: true,  label: "Shoulder int/ext rot"}
+
+      - {family: angles, part: elbow,    axis: x, lateral: true,  label: "Elbow flex/ext"}
+      - {family: angles, part: elbow,    axis: y, lateral: true,  label: "Elbow varus/valgus"}
+      - {family: angles, part: elbow,    axis: z, lateral: true,  label: "Elbow rotation"}
+
+      - {family: angles, part: wrist,    axis: x, lateral: true,  label: "Wrist flex/ext"}
+      - {family: angles, part: wrist,    axis: y, lateral: true,  label: "Wrist radial/ulnar dev"}
+      - {family: angles, part: wrist,    axis: z, lateral: true,  label: "Wrist rotation"}
+
+      - {family: angles, part: pelvis,   axis: x, lateral: true, label: "Pelvic tilt"}
+      - {family: angles, part: pelvis,   axis: y, lateral: true, label: "Pelvic obliquity"}
+      - {family: angles, part: pelvis,   axis: z, lateral: true, label: "Pelvic rotation"}
+
+      - {family: angles, part: hip,      axis: x, lateral: true,  label: "Hip flex/ext"}
+      - {family: angles, part: hip,      axis: y, lateral: true,  label: "Hip abd/add"}
+      - {family: angles, part: hip,      axis: z, lateral: true,  label: "Hip rotation"}
+
+      - {family: angles, part: knee,     axis: x, lateral: true,  label: "Knee flex/ext"}
+      - {family: angles, part: knee,     axis: y, lateral: true,  label: "Knee valgus/varus"}
+      - {family: angles, part: knee,     axis: z, lateral: true,  label: "Knee rotation"}
+
+      - {family: angles, part: ankle,    axis: x, lateral: true,  label: "Ankle dorsi/plantar"}
+      - {family: angles, part: footprogress, axis: z, lateral: true,  label: "Foot progression"}
+      - {family: angles, part: ankle,    axis: z, lateral: true,  label: "Foot rotation"}
+
+  - name: Joint Moments
+    id: MOMENTS_PANEL
+    grid: {rows: 3, cols: 4}
+    entries:
+      - {family: moments, part: hip,   axis: x, lateral: true,  label: "Hip flex/ext moment"}
+      - {family: moments, part: hip_l, axis: y, lateral: true,  label: "Hip abd/add moment (L)"}
+      - {family: moments, part: hip_r, axis: y, lateral: true,  label: "Hip abd/add moment (R)"}
+      - {family: moments, part: hip,   axis: z, lateral: true,  label: "Hip rotation moment"}
+
+      - {family: moments, part: knee,  axis: x, lateral: true,  label: "Knee flex/ext moment"}
+      - {family: moments, part: knee_l,axis: y, lateral: true,  label: "Knee valgus/varus moment (L)"}
+      - {family: moments, part: knee_r,axis: y, lateral: true,  label: "Knee valgus/varus moment (R)"}
+      - {family: moments, part: knee,  axis: z, lateral: true,  label: "Knee rotation moment"}
+
+      - {family: moments, part: ankle, axis: x, lateral: true,  label: "Ankle dorsi/plantar moment"}
+      - {family: moments, part: ankle_l,axis: y, lateral: true, label: "Ankle varus/valgus moment (L)"}
+      - {family: moments, part: ankle_r,axis: y, lateral: true, label: "Ankle varus/valgus moment (R)"}
+      - {family: moments, part: ankle, axis: z, lateral: true,  label: "Ankle rotation moment"}
+
+  - name: Joint Powers
+    id: POWERS_PANEL
+    grid: {rows: 1, cols: 3}
+    entries:
+      - {family: powers, part: hip,   axis: z, lateral: true, label: "Hip power (transverse Z)"}
+
+      - {family: powers, part: knee,  axis: z, lateral: true, label: "Knee power (transverse Z)"}
+
+      - {family: powers, part: ankle, axis: z, lateral: true, label: "Ankle power (transverse Z)"}
+
+  - name: Joint Forces
+    id: FORCES_PANEL
+    grid: {rows: 3, cols: 4}
+    entries:
+      - {family: forces, part: hip,   axis: x, lateral: true, label: "Hip force X"}
+      - {family: forces, part: hip_l, axis: y, lateral: true, label: "Hip force Y (L)"}
+      - {family: forces, part: hip_r, axis: y, lateral: true, label: "Hip force Y (R)"}
+      - {family: forces, part: hip,   axis: z, lateral: true, label: "Hip force Z"}
+
+      - {family: forces, part: knee,  axis: x, lateral: true, label: "Knee force X"}
+      - {family: forces, part: knee_l,axis: y, lateral: true, label: "Knee force Y (L)"}
+      - {family: forces, part: knee_r,axis: y, lateral: true, label: "Knee force Y (R)"}
+      - {family: forces, part: knee,  axis: z, lateral: true, label: "Knee force Z"}
+
+      - {family: forces, part: ankle, axis: x, lateral: true, label: "Ankle force X"}
+      - {family: forces, part: ankle_l,axis: y, lateral: true, label: "Ankle force Y (L)"}
+      - {family: forces, part: ankle_r,axis: y, lateral: true, label: "Ankle force Y (R)"}
+      - {family: forces, part: ankle, axis: z, lateral: true, label: "Ankle force Z"}
+
+  - name: Ground Reaction Forces
+    id: GRF_PANEL
+    grid: {rows: 1, cols: 3}
+    entries:
+      - {family: platform, part: grf, axis: x, lateral: true, label: "Normalized GRF X"}
+      - {family: platform, part: grf, axis: y, lateral: true, label: "Normalized GRF Y"}
+      - {family: platform, part: grf, axis: z, lateral: true, label: "Normalized GRF Z"}
