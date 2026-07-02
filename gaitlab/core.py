@@ -17,10 +17,12 @@ class Trial:
         self.is_valid = False
         self.cycle_times = {}
         self.stance_times = {}
+        self.kinetic_valid = {'left': True, 'right': True}
         self.spatiotemporal_params = []
 
         self._load_and_validate_events()
         if self.is_valid:
+            self._assess_kinetic_validity()
             self._calculate_spatiotemporals()
 
     def _load_and_validate_events(self):
@@ -58,9 +60,55 @@ class Trial:
         if 'left' in self.cycle_times and 'right' in self.cycle_times:
             self.is_valid = True
 
+    def _assess_kinetic_validity(self):
+        """Flags sides with implausible kinetic signal (e.g. no force-plate contact).
+
+        Some trials have missing or near-zero force-plate data for a side (foot never
+        landed on a plate), which biases inverse-dynamics outputs (moments/forces/powers/
+        platform GRF) without making them exactly zero. This is detected via the peak
+        absolute ankle force during stance, since the joint-forces file is present for
+        every trial (unlike platform GRF, which can be entirely missing).
+        """
+        qc_config = self.config.get('quality_control', {}).get('kinetic_validity', {})
+        check_canonical = qc_config.get('check_canonical', 'forces.ankle.z')
+        min_peak_abs = qc_config.get('min_peak_abs', 5.0)
+
+        family, part, axis = check_canonical.split('.')
+        dataset_props = self.config.get('datasets', {}).get(family)
+        if not dataset_props:
+            return
+
+        pattern = self.config['files'][dataset_props['source_file']]['pattern']
+        file_path = next((p for p in self.files.values() if p.match(pattern)), None)
+        if not file_path:
+            logging.warning(f"{self.subject_id}: could not assess kinetic validity (no {family} file found)")
+            return
+
+        try:
+            df = pd.read_csv(file_path, low_memory=False).set_index("time")
+        except Exception:
+            logging.warning(f"{self.subject_id}: could not assess kinetic validity (failed to read {family} file)")
+            return
+
+        for side in ['left', 'right']:
+            can_name = f"{family}.{part}.{axis}.{side}"
+            headers = dataset_props.get('canonical_to_headers', {}).get(can_name, [])
+            header = next((h for h in headers if h in df.columns), None)
+            if not header or side not in self.stance_times:
+                continue
+
+            start, end = self.stance_times[side]
+            peak = df.loc[start:end, header].abs().max()
+            if pd.isna(peak) or peak < min_peak_abs:
+                self.kinetic_valid[side] = False
+                logging.warning(
+                    f"{self.subject_id}: kinetic data flagged invalid on {side} "
+                    f"(peak |{can_name}|={peak} < threshold={min_peak_abs})"
+                )
+
     def _calculate_spatiotemporals(self):
         """Calculates spatiotemporal parameters using trajectory data."""
-        traj_config = self.config.get('datasets', {}).get('trajectories')
+        traj_config = self.config.get('internal_datasets', {}).get('trajectories')
         if not traj_config: return
 
         pattern = self.config['files'][traj_config['source_file']]['pattern']
@@ -129,15 +177,17 @@ class Trial:
                 proc_type = props.get('processing_type', 'kinematic')
                 start, end = self.stance_times.get(side) if proc_type == 'kinetic' else self.cycle_times.get(side)
 
-                if not start: continue
+                if start is None: continue
 
-                cycle_data = df.loc[start:end, header].dropna()
+                cycle_data = df.loc[start:end, header].dropna() * props.get('scale_factor', 1.0)
                 if len(cycle_data) < 2: continue
 
                 norm_times = np.linspace(0, 100, 51)
                 interp_values = np.interp(norm_times, np.linspace(0, 100, len(cycle_data)), cycle_data.values)
 
                 row = {'subject_id': self.subject_id, 'canonical_variable': can_name, 'side': side}
+                if proc_type == 'kinetic':
+                    row['kinetic_valid'] = self.kinetic_valid.get(side, True)
                 row.update({i: val for i, val in enumerate(interp_values)})
                 normalized_data.append(row)
 

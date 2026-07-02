@@ -1,7 +1,15 @@
 # File: gaitlab/analysis.py
 import pandas as pd
 from pathlib import Path
+from typing import List, Tuple
 import logging
+
+try:
+    display  # provided automatically by Jupyter/IPython
+except NameError:
+    def display(x):
+        """Fallback for running this module outside Jupyter (e.g. via main.py)."""
+        print(x)
 
 def generate_coverage_report(master_df: pd.DataFrame, output_dir: Path):
     """Calculates and saves the variable coverage report."""
@@ -66,3 +74,24 @@ def calculate_spatiotemporal_stats(spatiotemporal_df: pd.DataFrame, output_dir: 
     print("="*60)
     display(stats)
     logging.info(f"Spatiotemporal normative statistics saved to {spt_path}")
+
+def generate_kinetic_qc_report(records: List[Tuple[str, str, bool]], output_dir: Path):
+    """Saves an auditable list of subjects/sides flagged for unreliable kinetic data
+    (e.g. no valid force-plate contact). Data for these subjects/sides is NOT removed
+    from master_df -- this report exists so researchers can filter downstream if desired.
+    """
+    if not records:
+        logging.warning("No kinetic QC records to report. Skipping.")
+        return
+
+    qc_df = pd.DataFrame(records, columns=['subject_id', 'side', 'kinetic_valid'])
+    qc_path = output_dir / "tables" / "kinetic_qc_flags.csv"
+    qc_df.sort_values(['subject_id', 'side']).to_csv(qc_path, index=False)
+
+    n_flagged = (~qc_df['kinetic_valid']).sum()
+    logging.info(f"Kinetic QC report saved to {qc_path} ({n_flagged}/{len(qc_df)} subject-sides flagged invalid)")
+
+    print("\n" + "="*50)
+    print("      Subjects Flagged for Invalid Kinetic Data")
+    print("="*50)
+    display(qc_df[~qc_df['kinetic_valid']])

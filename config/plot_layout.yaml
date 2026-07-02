@@ -5,7 +5,7 @@ version: 1
 units:
   angles: "deg"
   moments: "Nm/kg"
-  power: "W/kg"
+  powers: "W/kg"
   forces: "N/kg"
   platform: "BW"
 

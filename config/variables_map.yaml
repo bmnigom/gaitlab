@@ -80,6 +80,7 @@ datasets:
     dataframe_var: moments_df
     time_column: "time"
     processing_type: kinetic
+    scale_factor: 0.001  # raw values are N*mm/kg; convert to Nm/kg
     canonical_to_headers:
       moments.hip.x.left:   ["l_hipmoment_x"]
       moments.hip.x.right:  ["r_hipmoment_x"]
@@ -152,6 +153,7 @@ datasets:
     dataframe_var: platform_df
     time_column: "time"
     processing_type: kinetic
+    scale_factor: 0.01  # raw values are %BW; convert to BW fraction
     canonical_to_headers:
       platform.grf.x.left:  ["l_normalisedgrf_x"]
       platform.grf.x.right: ["r_normalisedgrf_x"]
@@ -161,6 +163,10 @@ datasets:
 
       platform.grf.z.left:  ["l_normalisedgrf_z"]
       platform.grf.z.right: ["r_normalisedgrf_z"]
+
+# Datasets used only for internal calculations (e.g. spatiotemporal parameters).
+# These are NOT processed into time-normalized output curves by process_time_series.
+internal_datasets:
   # ------------------------- TRAJECTORIES ---------------------------
   trajectories:
     source_file: joint_trajectories
@@ -173,3 +179,13 @@ datasets:
       trajectories.ankle.y.right: ["r_hee_y"]
       trajectories.ankle.z.left:  ["l_hee_z"]
       trajectories.ankle.z.right: ["r_hee_z"]
+
+# Quality-control thresholds used to flag (not exclude) unreliable kinetic data,
+# e.g. gait cycles where the foot did not make valid contact with a force plate.
+quality_control:
+  kinetic_validity:
+    check_canonical: forces.ankle.z
+    # Empirically calibrated: peak |ankle force Z| during stance is clearly bimodal
+    # across the cohort (invalid trials ~0.04-0.35, valid trials ~0.76-2.94), with a
+    # clean gap in between. 0.5 sits in that gap.
+    min_peak_abs: 0.5

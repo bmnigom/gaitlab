@@ -8,7 +8,8 @@ from gaitlab.core import Trial
 from gaitlab.analysis import (
     generate_coverage_report,
     calculate_normative_stats,
-    calculate_spatiotemporal_stats
+    calculate_spatiotemporal_stats,
+    generate_kinetic_qc_report
 )
 from gaitlab.plotting import PngPlotter, HtmlPlotter
 
@@ -56,6 +57,7 @@ def main():
 
     all_timeseries = []
     all_spatiotemporal = []
+    kinetic_qc_records = []
 
     for subject_id in subjects_list:
         try:
@@ -66,6 +68,8 @@ def main():
                     all_timeseries.append(timeseries)
                 if trial.spatiotemporal_params:
                     all_spatiotemporal.extend(trial.spatiotemporal_params)
+                for side, valid in trial.kinetic_valid.items():
+                    kinetic_qc_records.append((subject_id, side, valid))
             else:
                 logging.warning(f"Skipping {subject_id}: No valid gait cycles identified.")
         except Exception as e:
@@ -87,6 +91,7 @@ def main():
     generate_coverage_report(master_df, OUTPUT_DIR)
     normative_stats = calculate_normative_stats(master_df, OUTPUT_DIR)
     calculate_spatiotemporal_stats(spatiotemporal_df, OUTPUT_DIR)
+    generate_kinetic_qc_report(kinetic_qc_records, OUTPUT_DIR)
 
     # --- 5. VISUALIZATION ---
     logging.info("--- Starting Visualization ---")
